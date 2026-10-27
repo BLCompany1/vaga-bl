@@ -4,7 +4,7 @@
  * Cada <form> define: data-vaga (nome da vaga) e data-obrigado (caminho da página de obrigado).
  * Campos obrigatórios usam data-req="mensagem de erro".
  */
-var BL_WEBHOOK_URL = '';
+var BL_WEBHOOK_URL = 'https://hook.us1.make.com/up9kk4m1oe2k5s56fda3jg3437qypnuy';
 var BL_MAX_MB = 5;
 var BL_EXT = ['pdf', 'doc', 'docx'];
 
