@@ -146,3 +146,14 @@ footer.site-footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:sp
   .hero-art .tag{left:12px}
   .stat{border-right:0;border-bottom:1px solid var(--line)}
 }
+
+/* upload de currículo */
+.upload{position:relative;display:flex;align-items:center;gap:16px;min-height:76px;padding:16px 20px;border:1.5px dashed #4A3378;border-radius:14px;background:#110920;cursor:pointer;transition:border-color .2s,background .2s;font-weight:400}
+.upload:hover{border-color:var(--brand-hi);background:#160C2A}
+.upload:focus-within{outline:2px solid var(--brand-hi);outline-offset:1px}
+.upload input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;min-height:0;padding:0}
+.upload svg{flex:0 0 28px}
+.upload-text{display:flex;flex-direction:column;gap:4px;min-width:0}
+.upload-text strong{font-size:15px;font-weight:600;color:var(--text);overflow-wrap:anywhere}
+.upload-text small{font-size:13px;color:var(--faint)}
+.upload.has-file{border-style:solid;border-color:var(--brand-hi);background:rgba(115,40,175,.14)}

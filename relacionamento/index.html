@@ -134,7 +134,7 @@
       <p class="lead" style="font-size:17px;max-width:420px">Preencha o formulário em menos de 2 minutos. Nosso time analisa todas as candidaturas e retorna pelo WhatsApp.</p>
     </div>
     <div class="form-box">
-      <form id="bl-form" data-vaga="Analista de Relacionamento" data-obrigado="/relacionamento/obrigado" novalidate>
+      <form id="bl-form" enctype="multipart/form-data" data-vaga="Analista de Relacionamento" data-obrigado="/relacionamento/obrigado" novalidate>
         <div class="field"><label for="bl-nome">Nome completo *</label><input id="bl-nome" name="nome" type="text" autocomplete="name" placeholder="Seu nome" data-req="Preencha seu nome."></div>
         <div class="field"><label for="bl-tel">WhatsApp *</label><input id="bl-tel" name="whatsapp" type="tel" inputmode="numeric" autocomplete="tel" placeholder="(17) 99999-9999" data-req="Informe um WhatsApp válido com DDD."></div>
         <div class="field"><label for="bl-email">E-mail *</label><input id="bl-email" name="email" type="email" autocomplete="email" placeholder="voce@email.com" data-req="Informe um e-mail válido."></div>
@@ -154,7 +154,13 @@
           </div>
         </fieldset>
         <div class="field"><label for="bl-ag">Já trabalhou em agência de marketing? *</label><select id="bl-ag" name="ja_trabalhou_agencia" data-req="Informe se já trabalhou em agência."><option value="">Selecione</option><option>Sim</option><option>Não</option></select></div>
-        <div class="field"><label for="bl-link">LinkedIn ou currículo *</label><input id="bl-link" name="linkedin_curriculo" type="url" placeholder="linkedin.com/in/… ou link do currículo" data-req="Envie seu LinkedIn ou currículo."></div>
+        <div class="field full"><label for="bl-cv">Currículo *</label>
+          <label class="upload" for="bl-cv">
+            <input id="bl-cv" name="curriculo" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" data-req="Anexe seu currículo." data-file>
+            <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#B98AF5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 17v-6"/><path d="M9.5 13.5L12 11l2.5 2.5"/></svg>
+            <span class="upload-text"><strong data-file-name>Clique para anexar seu currículo</strong><small>PDF, DOC ou DOCX · até 5 MB</small></span>
+          </label>
+        </div>
         <div class="field full"><label for="bl-msg">Conte uma situação difícil com cliente que você resolveu</label><textarea id="bl-msg" name="mensagem" rows="4" placeholder="O que aconteceu, o que você fez e como terminou…"></textarea></div>
         <p class="error full" id="bl-error" role="alert" hidden></p>
         <button type="submit" class="btn btn-primary full" style="font-size:17px;min-height:56px">Enviar candidatura</button>
