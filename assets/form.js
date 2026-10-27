@@ -1,10 +1,18 @@
 /* Formulário de candidatura — BL Company
- * Configure o webhook (Make / n8n) abaixo. Vazio = só redireciona para a página de obrigado.
- * O envio é multipart/form-data: campos de texto + o arquivo do currículo no campo "curriculo".
+ *
+ * BL_APPS_SCRIPT_URL (recomendado): URL /exec do Web App do Apps Script (apps-script/Code.gs).
+ *   O script salva o currículo na pasta do Drive e repassa os dados + link do arquivo para o Make.
+ *   Com ele preenchido, o BL_WEBHOOK_URL abaixo é ignorado (o webhook do Make fica no Apps Script).
+ *
+ * BL_WEBHOOK_URL (alternativa): envio direto para o Make/n8n em multipart/form-data,
+ *   com o arquivo no campo "curriculo".
+ *
+ * Os dois vazios = só redireciona para a página de obrigado.
  * Cada <form> define: data-vaga (nome da vaga) e data-obrigado (caminho da página de obrigado).
  * Campos obrigatórios usam data-req="mensagem de erro".
  */
-var BL_WEBHOOK_URL = 'https://hook.us1.make.com/up9kk4m1oe2k5s56fda3jg3437qypnuy';
+var BL_APPS_SCRIPT_URL = 'https://hook.us1.make.com/up9kk4m1oe2k5s56fda3jg3437qypnuy';
+var BL_WEBHOOK_URL = '';
 var BL_MAX_MB = 5;
 var BL_EXT = ['pdf', 'doc', 'docx'];
 
@@ -102,17 +110,40 @@ var BL_EXT = ['pdf', 'doc', 'docx'];
       window.location.href = form.dataset.obrigado + location.search;
     }
 
-    if (!BL_WEBHOOK_URL) return done();
+    if (!BL_APPS_SCRIPT_URL && !BL_WEBHOOK_URL) return done();
     submitBtn.disabled = true;
     var label = submitBtn.textContent;
     submitBtn.textContent = 'Enviando…';
-    // Sem Content-Type manual: o navegador define multipart/form-data com o boundary
+
+    function onError() {
+      submitBtn.disabled = false;
+      submitBtn.textContent = label;
+      fail('Não foi possível enviar agora. Tente novamente em instantes.');
+    }
+
+    if (BL_APPS_SCRIPT_URL) {
+      // Apps Script: JSON com o arquivo em base64. Sem header Content-Type
+      // (vai como text/plain) para não disparar preflight de CORS.
+      var file = cv.files[0];
+      var reader = new FileReader();
+      reader.onload = function () {
+        var base64 = String(reader.result).split(',')[1];
+        fetch(BL_APPS_SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({ dados: seen, curriculo: { nome: file.name, tipo: file.type, base64: base64 } })
+        })
+          .then(function (r) { return r.json(); })
+          .then(function (res) { if (!res.ok) throw new Error(res.erro); done(); })
+          .catch(onError);
+      };
+      reader.onerror = onError;
+      reader.readAsDataURL(file);
+      return;
+    }
+
+    // Webhook direto: multipart/form-data (o navegador define o boundary)
     fetch(BL_WEBHOOK_URL, { method: 'POST', body: body })
       .then(function (r) { if (!r.ok) throw new Error(r.status); done(); })
-      .catch(function () {
-        submitBtn.disabled = false;
-        submitBtn.textContent = label;
-        fail('Não foi possível enviar agora. Tente novamente em instantes.');
-      });
+      .catch(onError);
   });
 })();
